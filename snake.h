@@ -8,8 +8,8 @@
 #include <fcntl.h> 
 #include <time.h>
 
-#define MAX_X_SIZE_TABLE            40 
-#define MAX_Y_SIZE_TABLE            20
+#define MAX_X_SIZE_TABLE            50 
+#define MAX_Y_SIZE_TABLE            25
 
 #define SNAKE_X_INIT            (u8)5 
 #define SNAKE_Y_INIT            (u8)5 
@@ -17,7 +17,8 @@
 #define SNAKE_HEAD              (u8)0 
 #define SNAKE_TAIL              get_snake_tail() 
 
-#define TABLE_SCREEN            (char)'.' 
+#define TABLE_SCREEN            (char)'.'
+#define TABLE_BORDER            (char)'*'
 #define SNAKE_SYMBOL            (char)'#' 
 #define FOOD_SYMBOL             (char)'@' 
 #define REFRESH_RATE            150000 

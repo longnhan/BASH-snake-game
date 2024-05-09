@@ -20,24 +20,29 @@ food_st myfood; int main(int agrc, char *agrv[])
 /*----------- Function Initalization -----------*/ 
 
 int init_table() 
-{ 
-    clear_table(); 
-    
+{   
     for(u8 i=0; i<MAX_Y_SIZE_TABLE; i++) 
     { 
         for(u8 j=0; j<MAX_X_SIZE_TABLE; j++) 
         {
-            table[i][j] = TABLE_SCREEN; 
+            if((i==0) || (i==(MAX_Y_SIZE_TABLE-1)) || (j==0) || (j==(MAX_X_SIZE_TABLE-1)))
+            {
+                table[i][j] = TABLE_BORDER;    
+            }
+            else
+            {
+                table[i][j] = TABLE_SCREEN;
+            }
         } 
     } 
     
     //snake init position 
-    mysnake[SNAKE_HEAD].x = rand_num(MAX_Y_SIZE_TABLE, 0); 
-    mysnake[SNAKE_HEAD].y = rand_num(MAX_Y_SIZE_TABLE, 0); 
+    mysnake[SNAKE_HEAD].x = rand_num(MAX_Y_SIZE_TABLE-1, 1); 
+    mysnake[SNAKE_HEAD].y = rand_num(MAX_Y_SIZE_TABLE-1, 1); 
     
     //food init position 
-    myfood.x = rand_num(MAX_Y_SIZE_TABLE, 0); 
-    myfood.y = rand_num(MAX_Y_SIZE_TABLE, 0); 
+    myfood.x = rand_num(MAX_Y_SIZE_TABLE-1, 1); 
+    myfood.y = rand_num(MAX_Y_SIZE_TABLE-1, 1); 
     
     return RET_OK; 
 } 
@@ -193,7 +198,7 @@ int clear_table(void)
 void clear_screen() 
 { 
     // Clear the screen 
-    printf("\033[H\033[2J"); 
+    printf("\033[H\033[J");
     // Make sure to flush stdout 
     fflush(stdout); 
 } 
@@ -245,8 +250,8 @@ unsigned int rand_num(int upper, int lower)
 
 int food_gen(void) 
 { 
-    myfood.x = rand_num(MAX_Y_SIZE_TABLE, 0); 
-    myfood.y = rand_num(MAX_Y_SIZE_TABLE, 0); 
+    myfood.x = rand_num(MAX_Y_SIZE_TABLE-1, 1); 
+    myfood.y = rand_num(MAX_Y_SIZE_TABLE-1, 1); 
     
     return RET_OK; 
 } 
