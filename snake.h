@@ -8,6 +8,7 @@
 #include <fcntl.h> 
 #include <time.h>
 #include <string.h>
+#include <signal.h>
 
 #define MAX_X_SIZE_TABLE            50 
 #define MAX_Y_SIZE_TABLE            25
@@ -51,20 +52,32 @@ typedef struct
 
 /*Snake functions*/ 
 int snake_display(void); 
-int usr_navigation(void); 
 int snake_move(void);
 int snake_grow(void);
-unsigned char get_snake_tail(void); 
-
-/*Food functions*/ 
-int food_gen(void); 
-int food_display(void); 
+unsigned char get_snake_tail(void);
 int init_play_table(void); 
 int print_play_table(void); 
 int clear_table(void); 
 void clear_screen(void); 
 int kbhit(void); 
 unsigned int rand_num(int upper, int lower);
-int player_info();
+/*Player functions*/
+int usr_navigation(void);
+int player_info(void);
+
+/*Food functions*/ 
+int food_gen(void); 
+int food_display(void); 
+
+/*System supported functions*/
+int init_play_table(void); 
+int print_play_table(void); 
+int clear_table(void); 
+void clear_screen(void); 
+int kbhit(void); 
+unsigned int rand_num(int upper, int lower);
+
+/*Signal handler*/
+void sigint_handler(int sig);
 
 #endif /*_SNAKE_H_*/

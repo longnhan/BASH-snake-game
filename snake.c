@@ -7,6 +7,9 @@ food_st myfood;
 
 int main(int agrc, char *agrv[]) 
 {
+    // Register the SIGINT signal handler
+    signal(SIGINT, sigint_handler);
+
     mysnake = (snake_st *)malloc(SNAKE_INIT_SIZE * sizeof(snake_st));
     snake_size = SNAKE_INIT_SIZE;
 
@@ -292,7 +295,7 @@ int player_info()
 {
     printf("Welcome player: N/A\n");
     // printf("Snake tail: %d\n", get_snake_tail());
-    printf("Snake size: %d\n", snake_size);
+    printf("Snake size: %d\n", get_snake_tail());
     printf("Your score is: %d\n", user_point);
     return RET_OK;
 }
@@ -312,4 +315,13 @@ int snake_grow(void)
     mysnake = new_mysnake;
 
     return RET_OK;
+}
+
+void sigint_handler(int sig) 
+{
+    printf("Caught SIGINT: %d\n", sig);
+    printf("Clear resource\n");
+    free(mysnake);
+    printf("Exit game...\n");
+    exit(0);
 }
