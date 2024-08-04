@@ -64,6 +64,7 @@ unsigned int rand_num(int upper, int lower);
 /*Player functions*/
 int usr_navigation(void);
 int player_info(void);
+int hit_wall_check(void);
 
 /*Food functions*/ 
 int food_gen(void); 
@@ -78,6 +79,6 @@ int kbhit(void);
 unsigned int rand_num(int upper, int lower);
 
 /*Signal handler*/
-void sigint_handler(int sig);
+void signal_handler(int sig);
 
 #endif /*_SNAKE_H_*/

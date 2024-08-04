@@ -1,26 +1,37 @@
 #include "snake.h" 
 
-char table[MAX_Y_SIZE_TABLE][MAX_X_SIZE_TABLE] = {0}; 
-// snake_st mysnake[SNAKE_INIT_SIZE] = {0};
+char table[MAX_Y_SIZE_TABLE][MAX_X_SIZE_TABLE] = {0};
 snake_st *mysnake = NULL;
 food_st myfood; 
 
 int main(int agrc, char *agrv[]) 
 {
     // Register the SIGINT signal handler
-    signal(SIGINT, sigint_handler);
+    signal(SIGINT, signal_handler);
 
     mysnake = (snake_st *)malloc(SNAKE_INIT_SIZE * sizeof(snake_st));
     snake_size = SNAKE_INIT_SIZE;
 
+    //init play table
     init_play_table(); 
-    print_play_table(); 
+    
     while(1) 
     { 
+        //get user navigation 
+        usr_navigation(); 
+        
+        //update snake body to play table array
         snake_display(); 
-        food_display(); 
+        
+        //display food
+        food_display();
+
         // Print the table with the updated snake and food position 
-        print_play_table(); 
+        print_play_table();
+        
+        // check hitting wal and exit game
+        hit_wall_check();
+        
         usleep(REFRESH_RATE); 
     } 
     return RET_OK; 
@@ -79,9 +90,6 @@ int snake_display(void)
 {
     // Clear the snake's previous position 
     table[mysnake[SNAKE_TAIL].y][mysnake[SNAKE_TAIL].x] = TABLE_SCREEN; 
-    
-    //user navigation 
-    usr_navigation(); 
     
     //update snake moving and body inheritance 
     snake_move(); 
@@ -294,7 +302,8 @@ int food_display(void)
 int player_info()
 {
     printf("Welcome player: N/A\n");
-    // printf("Snake tail: %d\n", get_snake_tail());
+    printf("Snake X: %d\n", mysnake[SNAKE_HEAD].x);
+    printf("Snake Y: %d\n", mysnake[SNAKE_HEAD].y);
     printf("Snake size: %d\n", get_snake_tail());
     printf("Your score is: %d\n", user_point);
     return RET_OK;
@@ -317,11 +326,37 @@ int snake_grow(void)
     return RET_OK;
 }
 
-void sigint_handler(int sig) 
+int hit_wall_check(void)
 {
-    printf("Caught SIGINT: %d\n", sig);
-    printf("Clear resource\n");
-    free(mysnake);
-    printf("Exit game...\n");
-    exit(0);
+    if((mysnake[SNAKE_HEAD].x == MAX_X_SIZE_TABLE-1) ||
+        (mysnake[SNAKE_HEAD].x == 0) || 
+        (mysnake[SNAKE_HEAD].y == MAX_Y_SIZE_TABLE-1) ||
+        (mysnake[SNAKE_HEAD].y == 0))
+    {
+        signal_handler(252);
+    }
+    else
+    {
+
+    }
+    return RET_OK;
+}
+
+void signal_handler(int sig) 
+{
+    if(sig == SIGINT)
+    {
+        printf("Caught SIGINT: %d\n", sig);
+        printf("Clear resource\n");
+        free(mysnake);
+        printf("Exit game...\n");
+        exit(0);
+    }
+    else if( sig == 252)
+    {
+        printf("Game over...\n");
+        free(mysnake);
+        printf("Exit game...\n");
+        exit(0);
+    }
 }
