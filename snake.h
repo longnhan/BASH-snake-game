@@ -7,13 +7,14 @@
 #include <termios.h> 
 #include <fcntl.h> 
 #include <time.h>
+#include <string.h>
 
 #define MAX_X_SIZE_TABLE            50 
 #define MAX_Y_SIZE_TABLE            25
 
 #define SNAKE_X_INIT            (u8)5 
 #define SNAKE_Y_INIT            (u8)5 
-#define SNAKE_INIT_SIZE         (u8)10 
+#define SNAKE_INIT_SIZE         (u8)2
 #define SNAKE_HEAD              (u8)0 
 #define SNAKE_TAIL              get_snake_tail() 
 
@@ -49,21 +50,21 @@ typedef struct
 }food_st; 
 
 /*Snake functions*/ 
-extern int snake_display(void); 
-extern int usr_navigation(void); 
-extern int snake_move(void);
+int snake_display(void); 
+int usr_navigation(void); 
+int snake_move(void);
 int snake_grow(void);
-extern unsigned char get_snake_tail(void); 
+unsigned char get_snake_tail(void); 
 
 /*Food functions*/ 
-extern int food_gen(void); 
-extern int food_display(void); 
-extern int init_play_table(void); 
-extern int print_play_table(void); 
-extern int clear_table(void); 
-extern void clear_screen(void); 
-extern int kbhit(void); 
-extern unsigned int rand_num(int upper, int lower);
+int food_gen(void); 
+int food_display(void); 
+int init_play_table(void); 
+int print_play_table(void); 
+int clear_table(void); 
+void clear_screen(void); 
+int kbhit(void); 
+unsigned int rand_num(int upper, int lower);
 int player_info();
 
 #endif /*_SNAKE_H_*/

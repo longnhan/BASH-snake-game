@@ -187,10 +187,7 @@ int snake_move()
 
 unsigned char get_snake_tail() 
 {
-    // snake_size = (sizeof(*mysnake)/3);
-    unsigned char snake_tail = snake_size - 1; 
-    
-    // printf("array size: %d | snake tail: %d \n", arr_size, snake_tail); 
+    unsigned char snake_tail = snake_size - 1;
     return snake_tail; 
 } 
 
@@ -278,7 +275,7 @@ int food_display(void)
         user_point++;
 
         //snake grow up
-        // snake_grow();
+        snake_grow();
 
         //reset old food 
         table[myfood.y][myfood.x] = SNAKE_SYMBOL; 
@@ -294,10 +291,9 @@ int food_display(void)
 int player_info()
 {
     printf("Welcome player: N/A\n");
-    printf("Your score is: N/A\n");
-    printf("Snake tail: %d\n", get_snake_tail());
+    // printf("Snake tail: %d\n", get_snake_tail());
     printf("Snake size: %d\n", snake_size);
-    printf("User point: %d\n", user_point);
+    printf("Your score is: %d\n", user_point);
     return RET_OK;
 }
 
@@ -306,4 +302,14 @@ int snake_grow(void)
     snake_size++;
     snake_st *new_mysnake = (snake_st *)malloc((snake_size) * sizeof(snake_st));
 
+    // Copy the old array to the new array
+    memcpy(new_mysnake, mysnake, (snake_size - 1) * sizeof(snake_st));
+
+    // Free the old array
+    free(mysnake);
+
+    // Update the pointer to point to the new array
+    mysnake = new_mysnake;
+
+    return RET_OK;
 }
