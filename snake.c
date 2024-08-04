@@ -1,17 +1,23 @@
 #include "snake.h" 
 
 char table[MAX_Y_SIZE_TABLE][MAX_X_SIZE_TABLE] = {0}; 
-snake_st mysnake[SNAKE_MAX_SIZE] = {0}; 
-food_st myfood; int main(int agrc, char *agrv[]) 
-{ 
-    init_table(); 
-    print_table(); 
+// snake_st mysnake[SNAKE_INIT_SIZE] = {0};
+snake_st *mysnake = NULL;
+food_st myfood; 
+
+int main(int agrc, char *agrv[]) 
+{
+    mysnake = (snake_st *)malloc(SNAKE_INIT_SIZE * sizeof(snake_st));
+    snake_size = SNAKE_INIT_SIZE;
+
+    init_play_table(); 
+    print_play_table(); 
     while(1) 
     { 
         snake_display(); 
         food_display(); 
         // Print the table with the updated snake and food position 
-        print_table(); 
+        print_play_table(); 
         usleep(REFRESH_RATE); 
     } 
     return RET_OK; 
@@ -19,8 +25,9 @@ food_st myfood; int main(int agrc, char *agrv[])
 
 /*----------- Function Initalization -----------*/ 
 
-int init_table() 
-{   
+int init_play_table() 
+{
+    //play table array init   
     for(u8 i=0; i<MAX_Y_SIZE_TABLE; i++) 
     { 
         for(u8 j=0; j<MAX_X_SIZE_TABLE; j++) 
@@ -47,8 +54,9 @@ int init_table()
     return RET_OK; 
 } 
 
-int print_table(void) 
-{ 
+int print_play_table(void) 
+{
+    // clear screen table and print new screen table
     clear_screen(); 
     for(u8 i=0; i<MAX_Y_SIZE_TABLE; i++) 
     { 
@@ -58,11 +66,14 @@ int print_table(void)
         } printf("\n"); 
     } 
     
+    //print player info
+    player_info();
+
     return RET_OK; 
 } 
 
 int snake_display(void) 
-{ 
+{
     // Clear the snake's previous position 
     table[mysnake[SNAKE_TAIL].y][mysnake[SNAKE_TAIL].x] = TABLE_SCREEN; 
     
@@ -82,7 +93,7 @@ int snake_display(void)
 }
 
 int usr_navigation(void) 
-{ 
+{
     //Update the snake's position 
     if (kbhit()) 
     { 
@@ -127,7 +138,7 @@ int usr_navigation(void)
 } 
 
 int snake_move() 
-{ 
+{
     //update HEAD position 
     if(mysnake[SNAKE_HEAD].mv_state == MV_RGHT) 
     { 
@@ -175,9 +186,9 @@ int snake_move()
 } 
 
 unsigned char get_snake_tail() 
-{ 
-    unsigned char arr_size = (sizeof(mysnake)/3); 
-    unsigned char snake_tail = arr_size - 1; 
+{
+    // snake_size = (sizeof(*mysnake)/3);
+    unsigned char snake_tail = snake_size - 1; 
     
     // printf("array size: %d | snake tail: %d \n", arr_size, snake_tail); 
     return snake_tail; 
@@ -257,17 +268,42 @@ int food_gen(void)
 } 
 
 int food_display(void) 
-{ 
-    table[myfood.y][myfood.x] = FOOD_SYMBOL; 
+{
+    table[myfood.y][myfood.x] = FOOD_SYMBOL;
+    //eat food
     if((mysnake[SNAKE_HEAD].x == myfood.x) && 
         (mysnake[SNAKE_HEAD].y == myfood.y)) 
-    { 
+    {
+        //increase point
+        user_point++;
+
+        //snake grow up
+        // snake_grow();
+
         //reset old food 
         table[myfood.y][myfood.x] = SNAKE_SYMBOL; 
         
         //gen new food 
         food_gen(); 
         table[myfood.y][myfood.x] = FOOD_SYMBOL; 
-    } return 
-    RET_OK; 
+    } 
+    
+    return RET_OK; 
+}
+
+int player_info()
+{
+    printf("Welcome player: N/A\n");
+    printf("Your score is: N/A\n");
+    printf("Snake tail: %d\n", get_snake_tail());
+    printf("Snake size: %d\n", snake_size);
+    printf("User point: %d\n", user_point);
+    return RET_OK;
+}
+
+int snake_grow(void)
+{
+    snake_size++;
+    snake_st *new_mysnake = (snake_st *)malloc((snake_size) * sizeof(snake_st));
+
 }
